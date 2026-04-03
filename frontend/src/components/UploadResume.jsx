@@ -254,10 +254,10 @@ export const UploadResume = () => {
                 )}
              </div>
 
-             <div style={{ borderRadius: '24px', overflow: 'hidden', position: 'relative', height: '240px', background: 'linear-gradient(145deg, #e2e8f0 0%, #94a3b8 50%, #475569 100%)', boxShadow: 'var(--shadow-md)' }}>
-               <div style={{ position: 'absolute', inset: 0, padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', background: 'linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 100%)' }}>
-                 <div style={{ color: 'white', fontWeight: 800, fontSize: '0.95rem', marginBottom: '0.5rem', textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>Curator's Tip</div>
-                 <div key={currentTip} style={{ color: 'rgba(255,255,255,0.95)', fontSize: '0.9rem', lineHeight: 1.5, textShadow: '0 1px 2px rgba(0,0,0,0.2)', animation: 'fadeIn 0.5s ease' }}>{currentTip}</div>
+             <div style={{ borderRadius: '24px', overflow: 'hidden', position: 'relative', height: '240px', backgroundImage: 'url("/curator_tip_bg.png")', backgroundSize: 'cover', backgroundPosition: 'center', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1)' }}>
+               <div style={{ position: 'absolute', inset: 0, padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', background: 'linear-gradient(to top, rgba(15,23,42,0.9) 0%, rgba(15,23,42,0.3) 50%, rgba(15,23,42,0) 100%)' }}>
+                 <div style={{ color: '#60A5FA', fontWeight: 800, fontSize: '0.875rem', marginBottom: '0.5rem', textShadow: '0 2px 4px rgba(0,0,0,0.3)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Curator's Tip</div>
+                 <div key={currentTip} style={{ color: '#F8FAFC', fontSize: '0.95rem', lineHeight: 1.6, textShadow: '0 2px 4px rgba(0,0,0,0.4)', animation: 'fadeIn 0.5s ease', fontWeight: 500 }}>{currentTip}</div>
                </div>
              </div>
           </div>

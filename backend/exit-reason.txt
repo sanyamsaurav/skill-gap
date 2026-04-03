@@ -1,0 +1,4 @@
+Exited with code 0
+Error
+    at process.<anonymous> (D:\project\skill gap\backend\bisect.js:2:79)
+    at process.emit (node:events:518:28)

@@ -1,0 +1,22 @@
+STDOUT:
+Dependencies loaded!
+[dotenv@17.3.1] injecting env (5) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+Dotenv loaded!
+Preparing to listen on port... 5002
+Listen command executed. Node should stay alive now.
+Server running on port 5002
+
+STDERR:
+MongoDB connection error: MongoParseError: options usenewurlparser, useunifiedtopology are not supported
+    at parseOptions (D:\project\skill gap\backend\node_modules\mongodb\lib\connection_string.js:273:15)
+    at new MongoClient (D:\project\skill gap\backend\node_modules\mongodb\lib\mongo_client.js:67:61)
+    at NativeConnection.createClient (D:\project\skill gap\backend\node_modules\mongoose\lib\drivers\node-mongodb-native\connection.js:334:14)
+    at NativeConnection.openUri (D:\project\skill gap\backend\node_modules\mongoose\lib\connection.js:1074:34)
+    at Mongoose.connect (D:\project\skill gap\backend\node_modules\mongoose\lib\mongoose.js:475:15)
+    at Object.<anonymous> (D:\project\skill gap\backend\index.js:28:12)
+    at Module._compile (node:internal/modules/cjs/loader:1554:14)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+    at Function._load (node:internal/modules/cjs/loader:1108:12) {
+  errorLabelSet: Set(0) {}
+}

@@ -1,0 +1,55 @@
+﻿PDFParse type: function
+node : Error during 
+PDFParse test: TypeError: 
+Cannot read properties of 
+undefined (reading 
+'verbosity')
+At line:1 char:1
++ node test-pdf-2.js 2>&1 
+| Out-File -Encoding utf8 
+test_pdf_2_output.t ...
++ ~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (E  
+  rror during PD...ng '   
+ verbosity'):String) [    
+], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+    at new 
+exports.PDFParse 
+(D:\project\skill gap\back
+end\node_modules\pdf-parse
+\dist\pdf-parse\cjs\index.
+cjs:1:470673)
+    at test 
+(D:\project\skill gap\back
+end\test-pdf-2.js:7:24)
+    at Object.<anonymous> 
+(D:\project\skill gap\back
+end\test-pdf-2.js:14:1)
+    at Module._compile (no
+de:internal/modules/cjs/lo
+ader:1554:14)
+    at Object..js (node:in
+ternal/modules/cjs/loader:
+1706:10)
+    at Module.load (node:i
+nternal/modules/cjs/loader
+:1289:32)
+    at Function._load (nod
+e:internal/modules/cjs/loa
+der:1108:12)
+    at 
+TracingChannel.traceSync (
+node:diagnostics_channel:3
+22:14)
+    at wrapModuleLoad (nod
+e:internal/modules/cjs/loa
+der:220:24)
+    at Function.executeUse
+rEntryPoint [as runMain] (
+node:internal/modules/run_
+main:170:5)
