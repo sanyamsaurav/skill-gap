@@ -1,0 +1,17 @@
+﻿git : POST 
+git-receive-pack (chunked)
+At line:1 char:1
++ git push -v origin main 
+*>&1 | Out-File -FilePath 
+push_log.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~
+    + CategoryInfo        
+      : NotSpecified: (P  
+  OST git-receive-pack    
+ (chunked):String) [],    
+ RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
