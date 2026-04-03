@@ -43,7 +43,7 @@ export const GoPro = ({
     try {
       // 1. Create Checkout Order
       // Set to 99900 paise internally to represent ₹999
-      const orderResponse = await axios.post("http://localhost:5002/api/payment/create-order", {
+      const orderResponse = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5002'}/api/payment/create-order`, {
         amount: 99900 
       });
 
@@ -65,7 +65,7 @@ export const GoPro = ({
         handler: async function (response) {
           // 3. Payment Success - Verify Signature
           try {
-            const verifyResponse = await axios.post("http://localhost:5002/api/payment/verify", {
+            const verifyResponse = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5002'}/api/payment/verify`, {
                razorpay_order_id: response.razorpay_order_id,
                razorpay_payment_id: response.razorpay_payment_id,
                razorpay_signature: response.razorpay_signature

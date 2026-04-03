@@ -13,7 +13,7 @@ export const Dashboard = () => {
 
   useEffect(() => {
     if (user && user.id) {
-      axios.get(`http://localhost:5002/api/reports/${user.id}`)
+      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5002'}/api/reports/${user.id}`)
         .then(res => {
           if (res.data.success) {
             setReports(res.data.reports);

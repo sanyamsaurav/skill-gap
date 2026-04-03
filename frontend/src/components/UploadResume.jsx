@@ -118,7 +118,7 @@ export const UploadResume = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5002/api/analyze', formData, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5002'}/api/analyze`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${user.token}`

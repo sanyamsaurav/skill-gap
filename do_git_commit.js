@@ -1,22 +1,12 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 
-function run(cmd) {
-  try {
-    const r = execSync(cmd).toString();
-    console.log(`[${cmd}] success\n${r}`);
-    return r;
-  } catch (e) {
-    console.log(`[${cmd}] failed\n${e.stdout ? e.stdout.toString() : e.toString()}`);
-    return '';
-  }
+try {
+  let output = execSync('git add .').toString();
+  output += execSync('git commit -m "Commit recent changes"').toString();
+  output += execSync('git pull --rebase origin main').toString();
+  output += execSync('git push origin main 2>&1').toString();
+  fs.writeFileSync('git_commit_log.txt', output, 'utf8');
+} catch (e) {
+  fs.writeFileSync('git_commit_log.txt', e.stdout ? e.stdout.toString() : e.toString(), 'utf8');
 }
-
-const out = [];
-out.push(run('git add .'));
-out.push(run('git status'));
-out.push(run('git reset do_push.js do_git_commit.js')); // Ensure we don't commit our script
-out.push(run('git commit -m "Add vercel.json for multi-service deployment"'));
-out.push(run('git push origin main 2>&1'));
-
-fs.writeFileSync('git_out_commit.txt', out.join('\n'), 'utf8');

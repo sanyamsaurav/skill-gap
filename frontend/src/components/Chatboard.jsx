@@ -32,7 +32,7 @@ export const Chatboard = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5002/api/chat', {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5002'}/api/chat`, {
         messages: newMessages,
         userId: user ? user.id : 'anonymous'
       });
