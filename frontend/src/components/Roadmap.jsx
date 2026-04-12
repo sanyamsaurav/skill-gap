@@ -122,20 +122,20 @@ export const Roadmap = () => {
   if (!isPremium && !location.state?.roadmapData) {
     return (
       <Layout>
-        <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '2rem 0' }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '2rem 0' }} className="px-4 md:px-0">
           
-          <div style={{ textAlign: 'center', marginBottom: '3rem', paddingTop: '2rem' }}>
+          <div className="locked-hero-container" style={{ textAlign: 'center', marginBottom: '3rem', paddingTop: '2rem' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '64px', height: '64px', borderRadius: '16px', background: 'var(--sidebar-active-bg)', color: 'var(--primary-color)', marginBottom: '1.5rem' }}>
                <Zap size={32} />
             </div>
-            <h1 style={{ fontSize: '3rem', margin: '0 0 1rem 0', letterSpacing: '-0.02em', background: 'linear-gradient(135deg, var(--text-primary) 0%, var(--primary-color) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Unlock Your Professional Trajectory</h1>
+            <h1 className="locked-title" style={{ fontSize: '3rem', margin: '0 0 1rem 0', letterSpacing: '-0.02em', background: 'linear-gradient(135deg, var(--text-primary) 0%, var(--primary-color) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Unlock Your Professional Trajectory</h1>
             <p style={{ fontSize: '1.125rem', color: 'var(--text-secondary)', maxWidth: '600px', margin: '0 auto' }}>You have discovered a skills gap, now bridge it. Upgrade to Pro to access our AI-generated learning syllabus specifically curtailed to your resume weaknesses.</p>
           </div>
 
           <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'flex-start' }}>
             
             {/* Features Breakdown */}
-            <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', gap: '1.5rem', background: 'white', padding: '3rem', borderRadius: '24px', border: '1px solid var(--border-light)' }}>
+            <div className="pricing-features" style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', gap: '1.5rem', background: 'white', padding: '3rem', borderRadius: '24px', border: '1px solid var(--border-light)' }}>
                <h3 style={{ fontSize: '1.5rem', margin: '0 0 1rem 0' }}>Why upgrade?</h3>
                
                <div className="flex items-start gap-4">
@@ -164,7 +164,7 @@ export const Roadmap = () => {
             </div>
 
             {/* Pricing Card */}
-            <div style={{ flex: '1 1 350px', background: 'var(--bg-color)', padding: '0.5rem', borderRadius: '28px', border: '1px solid var(--border-light)' }}>
+            <div className="pricing-card" style={{ flex: '1 1 350px', background: 'var(--bg-color)', padding: '0.5rem', borderRadius: '28px', border: '1px solid var(--border-light)' }}>
                <div style={{ background: 'linear-gradient(180deg, white 0%, #FAFAFA 100%)', borderRadius: '24px', padding: '3rem 2rem', border: '1px solid var(--border-color)', boxShadow: '0 12px 24px -10px rgba(0,0,0,0.05)', textAlign: 'center' }}>
                  <div style={{ fontSize: '0.875rem', fontWeight: 700, letterSpacing: '0.05em', color: 'var(--primary-color)', marginBottom: '1rem', textTransform: 'uppercase' }}>Lifetime Access</div>
                  <div style={{ fontSize: '4rem', fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1, marginBottom: '0.5rem' }}>
@@ -206,12 +206,12 @@ export const Roadmap = () => {
 
   return (
     <Layout>
-      <div style={{ maxWidth: '900px', margin: '0 auto', position: 'relative' }}>
+      <div style={{ maxWidth: '900px', margin: '0 auto', position: 'relative' }} className="px-4 md:px-0">
         
-        <div className="flex justify-between items-end" style={{ marginBottom: '4rem' }}>
+        <div className="roadmap-header flex justify-between items-end" style={{ marginBottom: '4rem' }}>
           <div>
             <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>My Paths › <span style={{color: 'var(--primary-color)', fontWeight: 600}}>{targetJobTitle}</span></div>
-            <h1 style={{ fontSize: '2.5rem', margin: '0', letterSpacing: '-0.02em', textTransform: 'capitalize' }}>{targetJobTitle.length > 25 ? targetJobTitle.substring(0, 25) + '...' : targetJobTitle} Roadmap</h1>
+            <h1 className="roadmap-title" style={{ fontSize: '2.5rem', margin: '0', letterSpacing: '-0.02em', textTransform: 'capitalize' }}>{targetJobTitle.length > 25 ? targetJobTitle.substring(0, 25) + '...' : targetJobTitle} Roadmap</h1>
             <p style={{ margin: '0.5rem 0 0', fontSize: '1rem' }}>Your tailored learning journey to {targetJobTitle} expertise.</p>
           </div>
           <div className="flex items-center gap-4">
@@ -224,10 +224,10 @@ export const Roadmap = () => {
           </div>
         </div>
 
-        <div style={{ position: 'relative', paddingLeft: '4.5rem' }}>
+        <div className="roadmap-track-container" style={{ position: 'relative', paddingLeft: '4.5rem' }}>
           {/* Vertical Track with Gradient Glow */}
-          <div style={{ position: 'absolute', top: 0, bottom: 0, left: '2rem', width: '4px', background: '#E2E8F0', borderRadius: '4px' }}></div>
-          <div style={{ position: 'absolute', top: 0, height: '42%', left: '2rem', width: '4px', background: 'linear-gradient(180deg, var(--primary-color) 0%, #A855F7 100%)', borderRadius: '4px', boxShadow: '0 0 12px rgba(99, 102, 241, 0.6)' }}></div>
+          <div className="roadmap-track-line" style={{ position: 'absolute', top: 0, bottom: 0, left: '2rem', width: '4px', background: '#E2E8F0', borderRadius: '4px' }}></div>
+          <div className="roadmap-track-progress" style={{ position: 'absolute', top: 0, height: '42%', left: '2rem', width: '4px', background: 'linear-gradient(180deg, var(--primary-color) 0%, #A855F7 100%)', borderRadius: '4px', boxShadow: '0 0 12px rgba(99, 102, 241, 0.6)' }}></div>
 
           {roadmapData.map((node, index) => {
             const isActive = isNodeActive(index);
@@ -237,16 +237,16 @@ export const Roadmap = () => {
             if (isActive || isCompleted) {
               return (
                 <div key={index} className="roadmap-active-node" style={{ position: 'relative', marginBottom: '4rem', padding: '2.5rem', borderRadius: '24px', background: isCompleted ? 'linear-gradient(135deg, #ffffff 0%, #ecfdf5 100%)' : 'linear-gradient(135deg, #ffffff 0%, #FAFAFF 100%)', border: isCompleted ? '1px solid #D1FAE5' : '1px solid #E0E7FF', borderLeft: isCompleted ? '6px solid #10B981' : '6px solid #A855F7', boxShadow: isCompleted ? '0 20px 40px -15px rgba(16, 185, 129, 0.15)' : '0 20px 40px -15px rgba(168, 85, 247, 0.15)', transform: 'translateY(-2px)', transition: 'all 0.4s ease' }}>
-                  <div style={{ position: 'absolute', left: '-4.6rem', top: '2rem', background: isCompleted ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, var(--primary-color) 0%, #A855F7 100%)', color: 'white', width: '4.2rem', height: '4.2rem', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, boxShadow: isCompleted ? '0 0 20px rgba(16, 185, 129, 0.5)' : '0 0 20px rgba(168, 85, 247, 0.5)', fontWeight: 800, fontSize: '1.25rem', border: '4px solid white', transition: 'all 0.4s ease' }}>
+                  <div className="roadmap-badge" style={{ position: 'absolute', left: '-4.6rem', top: '2rem', background: isCompleted ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, var(--primary-color) 0%, #A855F7 100%)', color: 'white', width: '4.2rem', height: '4.2rem', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, boxShadow: isCompleted ? '0 0 20px rgba(16, 185, 129, 0.5)' : '0 0 20px rgba(168, 85, 247, 0.5)', fontWeight: 800, fontSize: '1.25rem', border: '4px solid white', transition: 'all 0.4s ease' }}>
                     {isCompleted ? <CheckCircle2 size={32} /> : `W${index+1}`}
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <div className="roadmap-node-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div>
                       <div className="flex items-center gap-3" style={{ marginBottom: '0.5rem' }}>
                         <div style={{ fontSize: '0.875rem', fontWeight: 800, color: isCompleted ? '#059669' : '#A855F7', letterSpacing: '0.05em', textTransform: 'uppercase' }}>{node.duration}</div>
                         <div style={{ height: '1px', width: '40px', background: isCompleted ? '#059669' : '#A855F7', opacity: 0.3 }}></div>
                       </div>
-                      <h3 style={{ fontSize: '1.875rem', margin: '0 0 1rem 0', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em', textTransform: 'capitalize' }}>{node.title}</h3>
+                      <h3 className="roadmap-node-title" style={{ fontSize: '1.875rem', margin: '0 0 1rem 0', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em', textTransform: 'capitalize' }}>{node.title}</h3>
                       <p style={{ maxWidth: '600px', color: 'var(--text-secondary)', fontSize: '1.05rem', lineHeight: 1.6 }}>{node.description}</p>
                     </div>
                     {isCompleted ? (
@@ -260,7 +260,7 @@ export const Roadmap = () => {
                     )}
                   </div>
 
-                  <div className="flex gap-8 mt-6" style={{ marginTop: '2.5rem' }}>
+                  <div className="flex gap-8 mt-6 roadmap-node-content" style={{ marginTop: '2.5rem' }}>
                     <div style={{ flex: 1.2 }}>
                       <div style={{ fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.05em', color: 'var(--text-tertiary)', marginBottom: '1.25rem' }}>CURATED RESOURCES</div>
                       <div className="flex flex-col gap-4">
@@ -315,8 +315,8 @@ export const Roadmap = () => {
             }
 
             return (
-              <div key={index} style={{ position: 'relative', opacity: 0.6, paddingLeft: '1rem', marginBottom: '4rem' }}>
-                <div style={{ position: 'absolute', left: '-4.6rem', top: '0.5rem', background: '#F1F5F9', color: '#94A3B8', width: '3.5rem', height: '3.5rem', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, border: '3px solid white', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' }}>
+              <div key={index} className="roadmap-inactive-node" style={{ position: 'relative', opacity: 0.6, paddingLeft: '1rem', marginBottom: '4rem' }}>
+                <div className="roadmap-badge-inactive" style={{ position: 'absolute', left: '-4.6rem', top: '0.5rem', background: '#F1F5F9', color: '#94A3B8', width: '3.5rem', height: '3.5rem', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, border: '3px solid white', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' }}>
                   <Lock size={18} strokeWidth={2.5} />
                 </div>
                 <div>

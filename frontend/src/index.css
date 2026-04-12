@@ -84,3 +84,32 @@ p { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem; line
   width: 2px; background-color: var(--border-color); z-index: 0;
 }
 .timeline-stem.active { background-color: var(--primary-color); }
+
+/* ---- Responsive Mobile Adjustments ---- */
+@media (max-width: 768px) {
+  /* Common Utilities */
+  .container { padding: 0 1rem; }
+  
+  /* Locked Page (Upgrade) */
+  .locked-title { font-size: 2rem !important; }
+  .pricing-features, .pricing-card { flex: 1 1 100% !important; }
+  .locked-hero-container { margin-bottom: 1.5rem !important; padding-top: 1rem !important; }
+  
+  /* Unlocked Page (Timeline) */
+  .roadmap-header { flex-direction: column !important; align-items: flex-start !important; gap: 1rem; margin-bottom: 2rem !important; }
+  .roadmap-title { font-size: 1.8rem !important; }
+  
+  .roadmap-track-container { padding-left: 1.5rem !important; margin-left: 1rem !important; }
+  .roadmap-track-line, .roadmap-track-progress { left: 0px !important; }
+  
+  .roadmap-active-node { padding: 1.5rem !important; margin-bottom: 2.5rem !important; }
+  .roadmap-badge { left: -2.5rem !important; width: 2.3rem !important; height: 2.3rem !important; font-size: 0.9rem !important; border-width: 2px !important; top: 1.5rem !important; }
+  
+  .roadmap-inactive-node { padding-left: 0.5rem !important; margin-left: 1rem !important; }
+  .roadmap-badge-inactive { left: -1.75rem !important; width: 1.5rem !important; height: 1.5rem !important; border-width: 2px !important; top: 0.8rem !important; }
+  
+  .roadmap-node-content { flex-direction: column !important; gap: 1.5rem !important; margin-top: 1.5rem !important; }
+  
+  .roadmap-node-header { flex-direction: column !important; align-items: flex-start !important; gap: 1rem; }
+  .roadmap-node-title { font-size: 1.5rem !important; }
+}
