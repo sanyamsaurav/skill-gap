@@ -1,0 +1,37 @@
+{
+  "name": "skill-gap",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sanyamsaurav/skill-gap.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sanyamsaurav/skill-gap/issues"
+  },
+  "homepage": "https://github.com/sanyamsaurav/skill-gap#readme",
+  "description": "",
+  "dependencies": {
+    "@google/generative-ai": "^0.22.0",
+    "axios": "^1.14.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.3.3",
+    "multer": "^2.1.1",
+    "openai": "^6.33.0",
+    "pdf-parse": "^2.4.5",
+    "razorpay": "^2.9.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
