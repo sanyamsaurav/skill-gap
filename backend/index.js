@@ -26,6 +26,14 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+// Vercel path homogenization: Strip /_/backend prefix if present so that standard routes like /api/analyze match perfectly
+app.use((req, res, next) => {
+  if (req.url.startsWith('/_/backend')) {
+    req.url = req.url.substring('/_/backend'.length);
+    if (!req.url.startsWith('/')) req.url = '/' + req.url;
+  }
+  next();
+});
 // Connect to MongoDB
 if (process.env.MONGO_URI) {
   mongoose.connect(process.env.MONGO_URI).then(() => {
