@@ -18,6 +18,7 @@
   "homepage": "https://github.com/sanyamsaurav/skill-gap#readme",
   "description": "",
   "dependencies": {
+    "@clerk/clerk-react": "^5.61.4",
     "@google/generative-ai": "^0.22.0",
     "axios": "^1.14.0",
     "bcryptjs": "^3.0.3",
@@ -25,11 +26,18 @@
     "dotenv": "^17.4.1",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
+    "lucide-react": "^0.292.0",
     "mongoose": "^9.3.3",
     "multer": "^2.1.1",
     "openai": "^6.33.0",
     "pdf-parse": "^2.4.5",
-    "razorpay": "^2.9.6"
+    "razorpay": "^2.9.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.6.0",
+    "react-is": "^18.2.0",
+    "react-router-dom": "^6.18.0",
+    "recharts": "^3.8.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
