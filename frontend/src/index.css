@@ -85,6 +85,18 @@ p { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem; line
 }
 .timeline-stem.active { background-color: var(--primary-color); }
 
+/* ---- Sidebar Base ---- */
+.sidebar {
+  width: 260px;
+  border-right: 1px solid var(--border-light);
+  height: 100vh;
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface-color);
+  transition: transform 0.3s ease;
+}
+
 /* ---- Responsive Mobile Adjustments ---- */
 @media (max-width: 768px) {
   /* Common Utilities */
@@ -112,4 +124,37 @@ p { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem; line
   
   .roadmap-node-header { flex-direction: column !important; align-items: flex-start !important; gap: 1rem; }
   .roadmap-node-title { font-size: 1.5rem !important; }
+  
+  /* Layout & Sidebar */
+  .sidebar {
+    position: fixed !important;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .main-content {
+    padding: 1rem 1.5rem !important;
+  }
+  .mobile-header-toggle {
+    display: block;
+  }
+}
+
+@media (min-width: 769px) {
+  .sidebar {
+    transform: translateX(0) !important;
+  }
+  .mobile-sidebar-overlay {
+    display: none !important;
+  }
+  .mobile-header-toggle {
+    display: none;
+  }
+  .main-content {
+    padding: 2rem 3rem;
+  }
 }
