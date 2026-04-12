@@ -46,7 +46,7 @@ if (process.env.MONGO_URI) {
 // Routes
 app.use('/api/auth', authRoutes);
 
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
 
 const safelyDeleteFile = (filePath) => {
   try {
@@ -103,13 +103,32 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
       return res.status(400).json({ success: false, message: "Only PDF resumes are supported. Please upload a PDF file." });
     }
 
-    const pdfBuffer = fs.readFileSync(req.file.path);
-    const parser = new PDFParse({ data: pdfBuffer });
-    const pdfData = await parser.getText();
-    const resumeText = pdfData.text;
-    await parser.destroy();
+    const pdfBuffer = req.file.buffer || (req.file.path ? fs.readFileSync(req.file.path) : null);
+    if (!pdfBuffer) {
+      return res.status(500).json({ success: false, message: "Error reading uploaded file." });
+    }
     
-    safelyDeleteFile(req.file.path);
+    // Some custom wrappers expect standard syntax, testing with what was originally here
+    let pdfData;
+    if (typeof PDFParse === 'function') {
+      try {
+        const parser = new PDFParse({ data: pdfBuffer });
+        pdfData = await parser.getText();
+        if (typeof parser.destroy === 'function') await parser.destroy();
+      } catch(e) {
+        // Fallback for standard pdf-parse package
+        pdfData = await PDFParse(pdfBuffer);
+      }
+    } else {
+      const pdf = require('pdf-parse');
+      pdfData = await pdf(pdfBuffer);
+    }
+    
+    const resumeText = pdfData.text;
+    
+    if (req.file.path) {
+      safelyDeleteFile(req.file.path);
+    }
 
     let aiResponseJson;
 
