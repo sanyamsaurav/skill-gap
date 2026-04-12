@@ -131,7 +131,7 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
       }`;
 
       const model = gemini.getGenerativeModel({ 
-        model: 'gemini-1.5-flash',
+        model: 'gemini-2.5-flash',
         generationConfig: { responseMimeType: "application/json" }
       });
       const result = await model.generateContent(systemPrompt);
@@ -278,7 +278,7 @@ app.post('/api/chat', async (req, res) => {
     });
     chatContext += "AI:";
 
-    const model = gemini.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = gemini.getGenerativeModel({ model: 'gemini-2.5-flash' });
     const result = await model.generateContent(chatContext);
     const replyText = result.response.text().trim();
 
@@ -308,6 +308,19 @@ app.get('/api/users/profile', protect, async (req, res) => {
   } else {
     res.status(404).json({ success: false, message: "User not found" });
   }
+});
+
+// Wildcard catch-all for debugging Vercel path mismatches
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Endpoint not found in Express",
+    debug: {
+      url: req.url,
+      originalUrl: req.originalUrl,
+      path: req.path
+    }
+  });
 });
 
 console.log('Preparing to listen on port...', port);
