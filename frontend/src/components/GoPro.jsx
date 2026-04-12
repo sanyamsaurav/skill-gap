@@ -42,9 +42,9 @@ export const GoPro = ({
 
     try {
       // 1. Create Checkout Order
-      // Set to 99900 paise internally to represent ₹999
+      // Set to 49900 paise internally to represent ₹499
       const orderResponse = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5002'}/api/payment/create-order`, {
-        amount: 99900 
+        amount: 49900 
       });
 
       if (!orderResponse.data.success) {
