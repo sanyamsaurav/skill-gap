@@ -29,5 +29,8 @@
             "entrypoint": "backend",
             "routePrefix": "/_/backend"
         }
-    }
+    },
+    "rewrites": [
+        { "source": "/_/backend/(.*)", "destination": "/backend/index.js" }
+    ]
 }
