@@ -1,5 +1,5 @@
 const pdf = require('pdf-parse');
-const fs = require('powershell'); // Not used, just placeholder
+const fs = require('fs');
 
 async function test() {
     console.log('Keys of require("pdf-parse"):', Object.keys(pdf));

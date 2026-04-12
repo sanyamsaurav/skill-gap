@@ -113,7 +113,7 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
 
     let aiResponseJson;
 
-    if (gemini) {
+    if (openai) {
       const systemPrompt = `You are an expert AI recruiter and career coach. You will be provided with a user's resume text, a target job title, and a job description. 
       Analyze the skill gap between the resume and the job requirements.
       Make scores realistic.
@@ -123,36 +123,22 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
       
       You must respond in JSON format with the following structure:
       {
-        "matchScore": number (0-100),
-        "skillInventory": { "matched": [string], "missing": [string], "recommended": [string] },
-        "gapAnalysisMatrix": [ { "subject": string, "A": number, "fullMark": 100 } ],
-        "learningRoadmap": [ { "title": string, "description": string, "courseLinks": [string], "duration": string } ],
-        "aiRecommendation": string
+        "matchScore": number,
+        "skillInventory": { "matched": ["string"], "missing": ["string"], "recommended": ["string"] },
+        "gapAnalysisMatrix": [ { "subject": "string", "A": number, "fullMark": 100 } ],
+        "learningRoadmap": [ { "title": "string", "description": "string", "courseLinks": [], "duration": "string" } ],
+        "aiRecommendation": "string"
       }`;
 
-      const model = gemini.getGenerativeModel({ 
-        model: 'gemini-2.5-flash',
-        generationConfig: { responseMimeType: "application/json" }
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [{ role: "user", content: systemPrompt }],
+        response_format: { type: "json_object" }
       });
-      const result = await model.generateContent(systemPrompt);
-      let responseText = result.response.text();
-      
-      let cleanedText = responseText.replace(/```json/gi, '').replace(/```/g, '').trim();
-      const start = cleanedText.indexOf('{');
-      const end = cleanedText.lastIndexOf('}');
-      
-      if (start !== -1 && end !== -1) {
-        cleanedText = cleanedText.substring(start, end + 1);
-      }
-
-      try {
-        aiResponseJson = JSON.parse(cleanedText);
-      } catch(parseErr) {
-        console.error("Failed to parse Gemini JSON:", responseText);
-        throw new Error("AI returned malformed JSON");
-      }
+      aiResponseJson = JSON.parse(completion.choices[0].message.content);
     } else {
-       return res.status(500).json({ success: false, message: "GEMINI_API_KEY is not configured in environment variables." });
+       return res.status(500).json({ success: false, message: "OPENAI_API_KEY is not configured in environment variables." });
+    });
     }
 
     // Save report functionality if user is authenticated
@@ -268,19 +254,22 @@ app.post('/api/chat', async (req, res) => {
       return res.status(400).json({ success: false, message: "Messages array is required." });
     }
 
-    if (!gemini) {
-      return res.status(500).json({ success: false, message: "GEMINI_API_KEY is not configured." });
+    if (!openai) {
+      return res.status(500).json({ success: false, message: "OPENAI_API_KEY is not configured." });
     }
 
-    let chatContext = "You are an expert AI career coach and technical mentor for a skill gap analyzer platform. Your goal is to provide concise, helpful, and encouraging answers about skills, careers, resumes, and learning roadmaps.\n\n";
+    const oaiMessages = [
+      { role: "system", content: "You are an expert AI career coach and technical mentor for a skill gap analyzer platform. Your goal is to provide concise, helpful, and encouraging answers about skills, careers, resumes, and learning roadmaps." }
+    ];
     messages.forEach(m => {
-       chatContext += `${m.role === 'user' ? 'User' : 'AI'}: ${m.content}\n`;
+       oaiMessages.push({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content });
     });
-    chatContext += "AI:";
 
-    const model = gemini.getGenerativeModel({ model: 'gemini-2.5-flash' });
-    const result = await model.generateContent(chatContext);
-    const replyText = result.response.text().trim();
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: oaiMessages
+    });
+    const replyText = completion.choices[0].message.content.trim();
 
     res.json({
       success: true,
