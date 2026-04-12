@@ -4,6 +4,7 @@ import { Layout } from './Layout';
 import { useUser } from '@clerk/clerk-react';
 import { Check, CheckCircle2, Lock, ExternalLink, RefreshCw, Map, Zap, Target, ArrowRight } from 'lucide-react';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 
 export const Roadmap = () => {
   const location = useLocation();
@@ -59,35 +60,62 @@ export const Roadmap = () => {
       return;
     }
 
-    const options = {
-      key: 'rzp_test_SXv1gd5JfNU9an',
-      amount: 499 * 100, // Amount in paise
-      currency: 'INR',
-      name: 'Skill Gap Pro',
-      description: 'Unlock personalized AI Roadmaps',
-      handler: async function (response) {
-        // Frontend-only upgrade
-        try {
-          await user.update({ unsafeMetadata: { isPremium: true } });
-          toast.success('🎉 Welcome to Pro! Roadmap Unlocked!', { duration: 4000 });
-          // Note: The UI will automatically re-render because user instance updates.
-        } catch (err) {
-          toast.error('Payment verified but failed to update profile. Please contact support.');
-        } 
-      },
-      prefill: {
-        name: user?.firstName || 'Guest',
-        email: user?.primaryEmailAddress?.emailAddress || '',
-      },
-      theme: { color: '#4F46E5' },
-    };
+    try {
+      const orderResponse = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5002'}/api/payment/create-order`, {
+        amount: 49900 
+      });
 
-    const rzp = new window.Razorpay(options);
-    rzp.on('payment.failed', function (response){
-      toast.error('Payment failed: ' + response.error.description);
-    });
-    rzp.open();
-    setIsProcessing(false);
+      if (!orderResponse.data.success) {
+        setIsProcessing(false);
+        return toast.error("Server error. Could not build your payment order.");
+      }
+
+      const { id: order_id, amount, currency } = orderResponse.data.order;
+
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_SYcm1sKWLzInbx',
+        amount: amount.toString(),
+        currency: currency,
+        name: 'Skill Gap Pro',
+        description: 'Unlock personalized AI Roadmaps',
+        order_id: order_id,
+        handler: async function (response) {
+          try {
+            const verifyResponse = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5002'}/api/payment/verify`, {
+               razorpay_order_id: response.razorpay_order_id,
+               razorpay_payment_id: response.razorpay_payment_id,
+               razorpay_signature: response.razorpay_signature
+            });
+
+            if (verifyResponse.data.success) {
+               await user.update({ unsafeMetadata: { isPremium: true } });
+               toast.success('🎉 Welcome to Pro! Roadmap Unlocked!', { duration: 4000 });
+            } else {
+               toast.error("Signature tampering detected.");
+            }
+          } catch(err) {
+             console.error("Verification failed:", err);
+             toast.error(err.response?.data?.message || "Payment verification failed.");
+          }
+        },
+        prefill: {
+          name: user?.firstName || 'Guest',
+          email: user?.primaryEmailAddress?.emailAddress || '',
+        },
+        theme: { color: '#4F46E5' },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.on('payment.failed', function (response){
+        toast.error('Payment failed: ' + response.error.description);
+      });
+      rzp.open();
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Checkout initialization failed");
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   // For demo, we are skipping the strict gate if they reach here from Analysis.

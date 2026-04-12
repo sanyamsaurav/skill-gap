@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 const fs = require('fs');
 const path = require('path');
 const { OpenAI } = require('openai');
-const { GoogleGenAI } = require('@google/genai');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 const mongoose = require('mongoose');
 const { PDFParse } = require('pdf-parse');
 const { protect } = require('./middleware/auth');
@@ -17,8 +17,8 @@ const Report = require('./models/Report');
 
 console.log('Dependencies loaded!');
 
-dotenv.config();
-console.log('Dotenv loaded!');
+dotenv.config({ path: path.resolve(__dirname, '.env') });
+console.log('Dotenv loaded from', path.resolve(__dirname, '.env'));
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -40,6 +40,16 @@ app.use('/api/auth', authRoutes);
 
 const upload = multer({ dest: 'uploads/' });
 
+const safelyDeleteFile = (filePath) => {
+  try {
+    if (filePath && fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+  } catch (err) {
+    console.warn(`Could not delete file ${filePath}:`, err.message);
+  }
+};
+
 // Initialize specialized services conditionally
 let openai;
 if (process.env.OPENAI_API_KEY) {
@@ -50,7 +60,7 @@ if (process.env.OPENAI_API_KEY) {
 
 let gemini;
 if (process.env.GEMINI_API_KEY) {
-  gemini = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 }
 
 let razorpay;
@@ -72,7 +82,7 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
     
     if (!req.file || !jobDescription) {
       if (req.file && req.file.path) {
-        fs.unlinkSync(req.file.path);
+        safelyDeleteFile(req.file.path);
       }
       return res.status(400).json({ success: false, message: "Resume file and job description are required." });
     }
@@ -80,7 +90,7 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
     const fileExtension = path.extname(req.file.originalname).toLowerCase();
     if (req.file.mimetype !== 'application/pdf' || fileExtension !== '.pdf') {
       if (req.file.path) {
-        fs.unlinkSync(req.file.path);
+        safelyDeleteFile(req.file.path);
       }
       return res.status(400).json({ success: false, message: "Only PDF resumes are supported. Please upload a PDF file." });
     }
@@ -91,7 +101,7 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
     const resumeText = pdfData.text;
     await parser.destroy();
     
-    fs.unlinkSync(req.file.path);
+    safelyDeleteFile(req.file.path);
 
     let aiResponseJson;
 
@@ -101,60 +111,36 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
       Make scores realistic.
       Resume: ${resumeText.substring(0, 3000)}
       Job Title: ${jobTitle}
-      Job Description: ${jobDescription.substring(0, 1500)}`;
-
-      const response = await gemini.models.generateContent({
-         model: 'gemini-2.5-flash',
-         contents: systemPrompt,
-         config: {
-           responseMimeType: "application/json",
-           responseSchema: {
-             type: "OBJECT",
-             properties: {
-               matchScore: { type: "INTEGER", description: "Match score between 0 and 100" },
-               skillInventory: {
-                 type: "OBJECT",
-                 properties: {
-                   matched: { type: "ARRAY", items: { type: "STRING" } },
-                   missing: { type: "ARRAY", items: { type: "STRING" } },
-                   recommended: { type: "ARRAY", items: { type: "STRING" } }
-                 }
-               },
-               gapAnalysisMatrix: {
-                 type: "ARRAY",
-                 items: {
-                   type: "OBJECT",
-                   properties: {
-                     subject: { type: "STRING", description: "Subject area, e.g. Frontend, Backend, Soft Skills" },
-                     A: { type: "INTEGER", description: "Score attained 0-100" },
-                     fullMark: { type: "INTEGER", description: "Always 100" }
-                   }
-                 }
-               },
-               learningRoadmap: {
-                 type: "ARRAY",
-                 description: "Exactly 3 or 4 learning roadmap steps mapped to missing skills.",
-                 items: {
-                   type: "OBJECT",
-                   properties: {
-                     title: { type: "STRING" },
-                     description: { type: "STRING" },
-                     courseLinks: { type: "ARRAY", items: { type: "STRING" } },
-                     duration: { type: "STRING", description: "Duration format e.g. 'Week 1', 'Week 2'" }
-                   }
-                 }
-               },
-               aiRecommendation: { type: "STRING" }
-             }
-           }
-         }
-      });
+      Job Description: ${jobDescription.substring(0, 1500)}
       
-      const cleanedText = response.text.trim();
+      You must respond in JSON format with the following structure:
+      {
+        "matchScore": number (0-100),
+        "skillInventory": { "matched": [string], "missing": [string], "recommended": [string] },
+        "gapAnalysisMatrix": [ { "subject": string, "A": number, "fullMark": 100 } ],
+        "learningRoadmap": [ { "title": string, "description": string, "courseLinks": [string], "duration": string } ],
+        "aiRecommendation": string
+      }`;
+
+      const model = gemini.getGenerativeModel({ 
+        model: 'gemini-2.5-flash',
+        generationConfig: { responseMimeType: "application/json" }
+      });
+      const result = await model.generateContent(systemPrompt);
+      let responseText = result.response.text();
+      
+      let cleanedText = responseText.replace(/```json/gi, '').replace(/```/g, '').trim();
+      const start = cleanedText.indexOf('{');
+      const end = cleanedText.lastIndexOf('}');
+      
+      if (start !== -1 && end !== -1) {
+        cleanedText = cleanedText.substring(start, end + 1);
+      }
+
       try {
         aiResponseJson = JSON.parse(cleanedText);
       } catch(parseErr) {
-        console.error("Failed to parse Gemini JSON:", cleanedText);
+        console.error("Failed to parse Gemini JSON:", responseText);
         throw new Error("AI returned malformed JSON");
       }
     } else {
@@ -205,16 +191,27 @@ app.get('/api/reports/:userId', async (req, res) => {
 app.post('/api/payment/create-order', async (req, res) => {
   try {
     // Hot-reload .env secrets so the user doesn't have to restart their Node instance
-    require('dotenv').config({ override: true });
+    const envPath = require('path').resolve(__dirname, '.env');
+    require('dotenv').config({ path: envPath, override: true });
+
+    const key_id = process.env.RAZORPAY_KEY_ID || process.env.VITE_RAZORPAY_KEY_ID;
+    const key_secret = process.env.RAZORPAY_KEY_SECRET;
+
+    if (!key_id || !key_secret) {
+      console.error("Razorpay order creation error: Missing Razorpay environment variables. key_id present:", !!key_id, "key_secret present:", !!key_secret);
+      return res.status(500).json({ success: false, message: "Razorpay credentials are not configured in environment variables." });
+    }
+
     const dynamicRazorpay = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID,
-      key_secret: process.env.RAZORPAY_KEY_SECRET,
+      key_id: key_id,
+      key_secret: key_secret,
     });
 
     const { amount } = req.body;
     
-    if (!dynamicRazorpay) {
-        return res.status(500).json({ success: false, message: "Razorpay credentials are not configured in environment variables." });
+    if (!amount) {
+      console.error("Razorpay order creation error: Missing amount in request body.");
+      return res.status(400).json({ success: false, message: "Amount is required to create a payment order." });
     }
 
     const options = {
@@ -226,8 +223,8 @@ app.post('/api/payment/create-order', async (req, res) => {
     const order = await dynamicRazorpay.orders.create(options);
     res.json({ success: true, order });
   } catch (error) {
-    console.error("Razorpay order creation error:", error);
-    res.status(500).json({ success: false, message: "Error creating payment order." });
+    console.error("Razorpay order creation error from SDK:", error.message || error);
+    res.status(500).json({ success: false, message: error.message || "Error creating payment order." });
   }
 });
 
@@ -273,12 +270,9 @@ app.post('/api/chat', async (req, res) => {
     });
     chatContext += "AI:";
 
-    const response = await gemini.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: chatContext,
-    });
-    
-    const replyText = response.text.trim();
+    const model = gemini.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    const result = await model.generateContent(chatContext);
+    const replyText = result.response.text().trim();
 
     res.json({
       success: true,
