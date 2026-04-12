@@ -138,7 +138,6 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
       aiResponseJson = JSON.parse(completion.choices[0].message.content);
     } else {
        return res.status(500).json({ success: false, message: "OPENAI_API_KEY is not configured in environment variables." });
-    });
     }
 
     // Save report functionality if user is authenticated
