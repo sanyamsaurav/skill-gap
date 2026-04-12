@@ -123,7 +123,7 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
       }`;
 
       const model = gemini.getGenerativeModel({ 
-        model: 'gemini-2.5-flash',
+        model: 'gemini-1.5-flash',
         generationConfig: { responseMimeType: "application/json" }
       });
       const result = await model.generateContent(systemPrompt);
@@ -270,7 +270,7 @@ app.post('/api/chat', async (req, res) => {
     });
     chatContext += "AI:";
 
-    const model = gemini.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    const model = gemini.getGenerativeModel({ model: 'gemini-1.5-flash' });
     const result = await model.generateContent(chatContext);
     const replyText = result.response.text().trim();
 
@@ -303,7 +303,12 @@ app.get('/api/users/profile', protect, async (req, res) => {
 });
 
 console.log('Preparing to listen on port...', port);
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+if (!process.env.VERCEL) {
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
+}
 console.log('Listen command executed. Node should stay alive now.');
+
+// Export for Vercel serverless integration
+module.exports = app;
