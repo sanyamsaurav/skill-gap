@@ -37,6 +37,8 @@
 body { font-family: var(--font-family); background-color: var(--bg-color); color: var(--text-primary); line-height: 1.5; -webkit-font-smoothing: antialiased; }
 
 /* Utilities */
+.hidden { display: none !important; }
+.block { display: block !important; }
 .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
 .flex { display: flex; }
 .flex-col { display: flex; flex-direction: column; }
