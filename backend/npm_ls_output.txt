@@ -1,0 +1,8 @@
+backend@1.0.0 D:\project\skill gap\backend
+└─┬ @google/genai@1.48.0
+  └─┬ google-auth-library@10.6.2
+    └─┬ gaxios@7.1.4
+      └─┬ node-fetch@3.3.2
+        └─┬ fetch-blob@3.2.0
+          └── node-domexception@1.0.0
+

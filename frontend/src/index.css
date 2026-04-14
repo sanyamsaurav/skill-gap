@@ -101,6 +101,7 @@ p { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem; line
 @media (max-width: 768px) {
   /* Common Utilities */
   .container { padding: 0 1rem; }
+  .flex-col-mobile { flex-direction: column !important; }
   
   /* Locked Page (Upgrade) */
   .locked-title { font-size: 2rem !important; }

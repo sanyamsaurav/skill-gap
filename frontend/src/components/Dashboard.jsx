@@ -34,7 +34,7 @@ export const Dashboard = () => {
           <p style={{ fontSize: '1rem' }}>Welcome back. Your professional trajectory is trending upward.</p>
         </div>
         
-        <div className="flex gap-6" style={{ marginBottom: '3rem' }}>
+        <div className="flex flex-col-mobile gap-6" style={{ marginBottom: '3rem' }}>
           
           <div className="card text-center flex-col items-center justify-center" style={{ flex: 1, padding: '2rem' }}>
             <div style={{ color: 'var(--text-primary)', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '1.5rem' }}>Current Match Score</div>
@@ -72,7 +72,7 @@ export const Dashboard = () => {
         </div>
 
         <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Quick Start</h3>
-        <div className="flex gap-6" style={{ marginBottom: '3rem' }}>
+        <div className="flex flex-col-mobile gap-6" style={{ marginBottom: '3rem' }}>
           <Link to="/upload" className="card" style={{ flex: 1, background: '#F1F5F9', border: 'none', textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column', padding: '2rem', transition: 'transform 0.2s' }}>
             <div style={{ color: 'var(--primary-color)', marginBottom: '1.5rem' }}><FileUp size={24} /></div>
             <div style={{ fontWeight: 700, fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Upload New Resume</div>

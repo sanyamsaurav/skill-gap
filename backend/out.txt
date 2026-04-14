@@ -1,0 +1,9 @@
+backend@1.0.0 D:\project\skill gap\backend
+└─┬ mongoose@9.3.3
+  └─┬ mongodb@7.1.1
+    └─┬ gcp-metadata@7.0.1
+      └─┬ gaxios@7.1.4
+        └─┬ node-fetch@3.3.2
+          └─┬ fetch-blob@4.0.0 overridden
+            └── node-domexception@1.0.0
+
